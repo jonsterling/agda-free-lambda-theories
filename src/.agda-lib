@@ -1,0 +1,4 @@
+name: free-lambda-theories
+include:
+  .
+  ../modules/agda-prelude/src
