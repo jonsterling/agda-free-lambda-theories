@@ -223,26 +223,6 @@ module _ (𝔏 : Sig) where
       → (α : f₀ ≈ f₁)
       → (β : g₀ ≈ g₁)
       → f₀ ⟓ g₀ ≈ f₁ ⟓ g₁
-    inl
-      : {A B X : obj}
-      → {f₀ f₁ : hom (A ⊕ B) X}
-      → f₀ ≈ f₁
-      → inl ⟓ f₀ ≈ inl ⟓ f₁
-    inr
-      : {A B X : obj}
-      → {f₀ f₁ : hom (A ⊕ B) X}
-      → f₀ ≈ f₁
-      → inr ⟓ f₀ ≈ inr ⟓ f₁
-    fst
-      : {X A B : obj}
-      → {f₀ f₁ : hom X (A ⊗ B)}
-      → f₀ ≈ f₁
-      → f₀ ⟓ fst ≈ f₁ ⟓ fst
-    snd
-      : {X A B : obj}
-      → {f₀ f₁ : hom X (A ⊗ B)}
-      → f₀ ≈ f₁
-      → f₀ ⟓ snd ≈ f₁ ⟓ snd
     [_,_]
       : {A B X : obj}
       → {f₀ f₁ : hom A X}
