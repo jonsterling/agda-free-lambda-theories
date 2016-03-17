@@ -104,6 +104,12 @@ module _ (𝔏 : Sig) where
     → hom (X ⊗ Y) (A ⊗ B)
   ⟨ f ⊗ g ⟩ = ⟨ fst ⟓ f , snd ⟓ g ⟩
 
+  λ↙[_]
+    : {A B C : obj}
+    → (f : hom A (B ⇒ C))
+    → hom (A ⊗ B) C
+  λ↙[ f ] = ⟨ fst ⟓ f , snd ⟩ ⟓ ap
+
   ⊕α⇒
     : {A B C : obj}
     → hom ((A ⊕ B) ⊕ C) (A ⊕ (B ⊕ C))
@@ -294,12 +300,6 @@ module Example where
 
   𝔏 : Sig
   𝔏 = ▸sig 𝔏₀ 𝔏₁
-
-  λ↙[_]
-    : {A B C : obj 𝔏}
-    → (f : hom 𝔏 A (B ⇒ C))
-    → hom 𝔏 (A ⊗ B) C
-  λ↙[ f ] = ⟨ fst ⟓ f , snd ⟩ ⟓ ap
 
   two : hom 𝔏 𝟙 « nat »
   two = « ze » ⟓ « su » ⟓ « su »
