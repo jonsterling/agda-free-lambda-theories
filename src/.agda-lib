@@ -2,3 +2,4 @@ name: free-lambda-theories
 include:
   .
   ../modules/agda-prelude/src
+  ../modules/agda-operads/src
