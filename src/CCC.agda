@@ -1,6 +1,7 @@
 {-# OPTIONS --type-in-type #-}
 module CCC where
 
+open import Operads
 open import Prelude.List
 open import Prelude.Path
 
@@ -19,6 +20,12 @@ module _ (𝔏 : Sig) where
   infix  0 _≈_
   infixr 1 _⟓_
   infix  2 «_»
+
+  𝔉 : Operad
+  𝔉 = Free[ ●₁ 𝔏 ]
+
+  𝔓 : PRO
+  𝔓 = Planar.pro 𝔉
 
   data obj : Set where
     «_»
@@ -45,9 +52,9 @@ module _ (𝔏 : Sig) where
 
   data hom : (A B : obj) → Set where
     «_»
-      : {A* : List (●₀ 𝔏)}{B : ●₀ 𝔏}
-      → (f : ●₁ 𝔏 A* B)
-      → hom ⟦ A* ⟧₀ « B »
+      : {A* B* : List (●₀ 𝔏)}
+      → (f* : PRO.hom 𝔓 A* B*)
+      → hom ⟦ A* ⟧₀ ⟦ B* ⟧₀
     ↻
       : {A : obj}
       → hom A A
@@ -285,6 +292,9 @@ module _ (𝔏 : Sig) where
       → ⟨ fst ⟓ λ↗[ f ] , snd ⟩ ⟓ ap ≈ f
 
 module Example where
+  pattern · = stop
+  pattern ψ g fs = step g fs
+
   data 𝔏₀ : Set where
     nat : 𝔏₀
 
@@ -302,16 +312,28 @@ module Example where
   𝔏 = ▸sig 𝔏₀ 𝔏₁
 
   two : hom 𝔏 𝟙 « nat »
-  two = « ze » ⟓ « su » ⟓ « su »
+  two =
+    «
+    PRO.seq (𝔓 𝔏)
+      (ψ ze [] ∷ [])
+      (ψ su (· ∷ []) ∷ [])
+    »
 
   three : hom 𝔏 𝟙 « nat »
-  three = « ze » ⟓ « su » ⟓ « su » ⟓ « su »
+  three =
+    «
+    PRO.seq (𝔓 𝔏)
+      (ψ ze [] ∷ [])
+      (PRO.seq (𝔓 𝔏)
+        (ψ su (· ∷ []) ∷ [])
+        (ψ su (· ∷ []) ∷ []))
+    »
 
   five : hom 𝔏 𝟙 « nat »
-  five = ⟨ two , three ⟩ ⟓ « add »
+  five = ⟨ two , three ⟩ ⟓ « ψ add (· ∷ · ∷ []) ∷ [] »
 
   add↗ : hom 𝔏 𝟙 (« nat » ⇒ « nat » ⇒ « nat »)
-  add↗ = λ↗[ snd ⟓ λ↗[ « add » ] ]
+  add↗ = λ↗[ snd ⟓ λ↗[ « ψ add (· ∷ · ∷ []) ∷ [] » ] ]
 
   five′ : hom 𝔏 𝟙 « nat »
   five′
